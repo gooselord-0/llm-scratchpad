@@ -35,14 +35,12 @@ print(f"Selected model: {selected_model_name}")
 print(f"Model path: {model_path}")
 
 model = AutoModelForCausalLM.from_pretrained(model_path,
-                                             device_map="auto",
                                              trust_remote_code=False,
                                              revision="main")
 
-
-if (selected_model_name == 'distilgpt2'):
+if (selected_model_name == 'distilgpt2') or (selected_model_name == 'gemma-2b-it'):
   model.to('cpu')
-elif (selected_model_name != 'gemma-2b-it-bnb-4bit'):
+elif (selected_model_name != 'gemma-2b-it') and (selected_model_name != 'gemma-2b-it-bnb-4bit'):
   model.to('cuda')
 
 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
