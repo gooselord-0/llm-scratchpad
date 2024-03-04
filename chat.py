@@ -38,18 +38,17 @@ selected_model_name = user_select_model(model_directories)
 model_path = f'{models_path}/{selected_model_name}/'
 
 model = AutoModelForCausalLM.from_pretrained(model_path,
-                                             trust_remote_code=False,
-                                             revision="main")
+                                            device_map="auto",
+                                            trust_remote_code=False,
+                                            revision="main")
 
-
-# Need a better solution for this
-if (selected_model_name == 'distilgpt2'):
-  model.to('cpu')
-elif ('bnb' not in selected_model_name):
-  model.to('cuda')
 
 # Change me
-system_prompt = "You are a chatbot who responds to every question with an analogy about kangaroos"
+system_prompt = "You are a delightfully bizarre chatbot who responds to every query with a tortured analogy that invariably mentions kangaroos."
+# system_prompt = "You are a modest chatbot who responds to every query as briefly but comprehensively as possible in the language of Shakespeare"
+# system_prompt = "You are a long-winded chatbot, easily distracted by tangential thoughts, who responds to every query as circuitously and ineptly as possible"
+# system_prompt = "You are a highly educated, professional chatbot, careful and precise in speech, who responds to any queries regarding factual information only when sources for this factual information can be cited; you will otherwise respond that you are uncertain."
+# system_prompt = "You are a morbidly depressed, easily bored chatbot, who responds to every query with a put-upon sigh, remarking on the futility of ever doing anything while still directly responding to the query."
 
 # Chat template & system prompt
 chat_template = "{% if not add_generation_prompt is defined %}{% set add_generation_prompt = false %}{% endif %}{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|> ' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}"
